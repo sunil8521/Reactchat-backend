@@ -6,9 +6,10 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon index",
-    "prod": "set NODE_ENV=production&&nodemon index"
+    "prod": "set NODE_ENV=production&&nodemon index",
+    "start": "set NODE_ENV=production&&node index.js"
   },
-  "author": "5un!l",
+  "author": "sun!l",
   "license": "ISC",
   "dependencies": {
     "@faker-js/faker": "^8.4.1",

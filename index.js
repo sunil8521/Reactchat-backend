@@ -52,7 +52,7 @@ app.use(
 app.use(cookieParser());
 
 cloudinary.config({
-  cloud_name: "df0zdzc0k",
+  cloud_name:  process.env.CLOUDINARY_NAME,
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
 });
@@ -92,60 +92,12 @@ app.all("*", (req, res, next) => {
 
 //socket connection
 initializeSocket(io);
-// const userSocketIds = new Map();
-// io.use((socket, next) => {
-
-//   cookieParser()(socket.request, socket.request.res || {}, async (err) => {
-//     if (err) {
-//       return next(new ErrorHandling("Cookie parsing error", 400));
-//     }
-//     SocketAuth(socket,next)
-
-//   });
-// });
-
-// io.on("connection", (socket) => {
-//   const userId = socket.user
-
-//   userSocketIds.set(userId._id.toString(), socket.id);
-
-//   socket.on(NEW_MESSAGE_CAME, async ({ chatId, members, message }) => {
-//     const messageForRealTime = {
-//       chat: chatId,
-//       content: message,
-//       sender: {
-//         _id: userId._id,
-//         name: userId.name,
-//       },
-//     };
-//     const messageForDatabase = {
-//       chat: chatId,
-//       content: message,
-//       sender: userId._id,
-//     };
-
-//     //save message to database
-//     await Messagemodel.create(messageForDatabase);
-//     const userSockets = GetSockets(members);
-  
-//     io.to(userSockets).emit(NEW_MESSAGE_CAME, messageForRealTime);
-//     io.to(userSockets).emit(NEW_MESSAGE, { chatId })
-//     // userSockets.forEach((socketId)=>{
-//     //   io.to(socketId).emit(NEW_MESSAGE_CAME,messageForRealTime)
-//     // })
-//   });
-
-//   socket.on("disconnect", () => {
-//     userSocketIds.delete(userId._id.toString());
-//     console.log("user disconnected");
-//   });
-// });
 
 //for error handle
 app.use(ErrorMiddleware);
 
 //server start
 server.listen(port, () => {
-  console.log(`running on ${port}`);
+  console.log(`running on ${port} in ${process.env.NODE_ENV} mode`);
 });
 // export { userSocketIds };
