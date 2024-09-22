@@ -24,9 +24,6 @@ import {Messagemodel} from "./mongoose_scheme/MessageScheme.js"
 
 import {initializeSocket} from "./socket.js"
 
-
-
-
 const app = express();
 const server = http.createServer(app);
 
@@ -78,6 +75,8 @@ app.get("/", (req, res) => {
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/chat", chatRoutes);
 app.use("/api/v1/admin", admintRoutes);
+
+
 //handle if route not present
 app.all("*", (req, res, next) => {
   next(

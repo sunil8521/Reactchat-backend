@@ -32,7 +32,6 @@ export const ErrorMiddleware = (err, req, res, next) => {
       err = new ErrorHandling(`Invalid ${err.path}: ${err.value}`, 400);
     }
     if (err.code === 11000) {
-      //   const value = err.message.match(/(["'])(\\?.)*?\1/)[0];
       const value = err.message.match(/dup key: { (.+?):/)[1];
       const message = `${value} aleady exist. please use another`;
       err = new ErrorHandling(message, 400);

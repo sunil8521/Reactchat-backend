@@ -38,7 +38,6 @@ export const signup = GlobalError(async (req, res, next) => {
     ...req.body,
     avtar: avtar,
   });
-  console.log(newuser);
   tokenRespone(201, res, newuser);
 });
 
@@ -87,7 +86,7 @@ export const searchuser = GlobalError(async (req, res, next) => {
 export const SendFriendRequest = GlobalError(async (req, res, next) => {
   const { recever } = req.body;
   const sender = req.user._id;
-
+  console.log("call this");
   const request = await Requestmodel.findOne({
     $or: [
       { rrecever: recever, rsender: req.user._id },
@@ -111,6 +110,7 @@ export const SendFriendRequest = GlobalError(async (req, res, next) => {
 
 export const AcceptFriendRequest = GlobalError(async (req, res, next) => {
   const { requestId, accept } = req.body;
+  let newChat;
 
   let success = false;
   let message = "Request rejected";
@@ -125,7 +125,7 @@ export const AcceptFriendRequest = GlobalError(async (req, res, next) => {
   }
   if (accept) {
     await Requestmodel.findByIdAndDelete(requestId);
-    const newChat = await Chatmodel.create({
+     newChat = await Chatmodel.create({
       members: [request.rsender, request.rrecever],
     });
     // emitEvent(req, NEW_REQUEST, [request.rsender], "request rejected");
@@ -135,7 +135,7 @@ export const AcceptFriendRequest = GlobalError(async (req, res, next) => {
 
 
   // emitEvent(req, NEW_REQUEST, [request.rsender], "request accepted");
-  // emitEvent(req, REFETCH_CHAT, newChat.members);
+  emitEvent(req, REFETCH_CHAT, newChat.members);
   await Requestmodel.findByIdAndDelete(requestId);
 
   res.status(200).json({ success: success, message: message });

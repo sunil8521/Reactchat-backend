@@ -4,6 +4,7 @@ import { Messagemodel } from "../mongoose_scheme/MessageScheme.js";
 import { GlobalError, ErrorHandling } from "../error/error.js";
 import { emitEvent } from "../utils/features.js";
 import { deleteFromCloudnary, UploadToCloudnary } from "../utils/multer.js";
+import { uploadToFirebase,deleteFromFirebase } from "../utils/firebaseConfig.js";
 import {
   ALERT,
   REFETCH_CHAT,
@@ -270,9 +271,14 @@ export const sendattachment = GlobalError(async (req, res, next) => {
       new ErrorHandling("You can't upload more than 5 files at a time")
     );
   }
-  const result = await UploadToCloudnary(file);
+  // const result = await UploadToCloudnary(file);
+  const result1 = await uploadToFirebase(file);
 
-  const attachment = result.map(({ public_id, url }) => ({
+  // const attachment = result1.map(({ public_id, secure_url }) => ({
+  //   public_id: public_id,
+  //   url: secure_url,
+  // }));
+  const attachment = result1.map(({ public_id, url }) => ({
     public_id: public_id,
     url: url,
   }));
@@ -386,7 +392,9 @@ export const deletechat = GlobalError(async (req, res, next) => {
     });
   });
   await Promise.all([
-    deleteFromCloudnary(publicIdForCloudNary),
+    // deleteFromCloudnary(publicIdForCloudNary),
+    deleteFromFirebase(publicIdForCloudNary),
+
     Messagemodel.deleteMany({ chat: chatId }),
     // chat.deleteOne(),
   ]);
